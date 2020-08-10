@@ -1,0 +1,186 @@
+#########
+# Step 1
+
+Code affected: none
+
+Created this file.
+
+#########
+# Step 2
+
+Code affected: all .java files
+
+Reformatted using the Google Java style formatter.
+
+#########
+# Step 3
+
+Code affected: Pig.turnAround
+
+Flaw: unnecessary if, leading to duplicate code.
+
+Fix: replaced if statement with a single assignment statement.
+
+#########
+# Step 4
+
+Code affected: all .java files in the farmyard folder except for Wind.java and created new FarmObject.java file
+
+Flaw: unnecessary duplicate code in each which can all be under a parent class.
+
+Fix: created a new FarmObject.java file (reformatted using the Google Java style formatter) as the parent class and extended all farmyard classes as FarmObject.
+
+#########
+# Step 5
+
+Code affected: ANIMAL_MANURE.java
+
+Flaw: improper file name.
+
+Fix: changed file name to AnimalManure.java to adhere to typical class name conventions.
+
+Note: nothing was modified in Main.java, Chicken.java and Pig.java although it was included in this commit.
+
+#########
+# Step 6
+
+Code affected: all .java files in the farmyard folder except for Wind.java
+
+Flaw: unnecessary and/or duplicate code which includes duplicate variables (String appearance, int x, int y, Color colour, etc.), useless variables (like eggShape, r, c, etc.) and methods (constructors which can be inherited, setLocation and draw, drawString, etc.).
+
+Fix: deleted all the unnecessary duplicate code (common/useless/unnecessary variables and methods) and added those duplicate code into the parent class FarmObject for all child classes to inherit. Added a static String DEFAULT_APPEARANCE to all child classes. All Javadoc and comments where applicable were updated.
+
+Note: this will not compile at this stage due to some missing variables and methods (in Human.java, Chicken.java, Pig.java, Main.java) which will be fixed and be more optimized at a later step.
+
+#########
+# Step 7
+
+Code affected: Human.java, Chicken.java, Pig.java, and new parent abstract LivingThing.java
+
+Flaw: unnecessary and/or duplicate code which includes a duplicate variable (boolean goingRight) and methods (reverseAppearance, turnAround)from Human.java, Chicken.java, and Pig.java which can all inherit from an extended class of FarmObject. reverseAppearance method can be created once and stored in a variable since there is no need to compute it over and over again.
+
+Fix: deleted all the unnecessary duplicate code (common variable and methods). Create a new abstract parent class LivingThing for Human.java, Chicken.java and Pig.java to inherit. Added an abstract move method to LivingThing (since all LivingThings should be able to move), new String forward and String reverse variables for the reverseAppearance and turnAround method (which was further optimized from the previous step 3).
+
+Note: some methods which were inherited from FarmObject in Chicken.java were deleted in this step (instead of the previous step because it was forgotten). Step 6 notes were edited slightly.
+
+#########
+# Step 8
+
+Code affected: Chicken.java, Pig.java, and new parent abstract FarmAnimal.java
+
+Flaw: unnecessary and/or duplicate code which includes a duplicate method (or related method) digest() from Chicken.java and Pig.java which can all inherit from an extended class of LivingThing.
+
+Fix: deleted all the unnecessary duplicate code digest (and related methods). Create a new abstract parent class FarmAnimal for Chicken.java and Pig.java to inherit. Added the digest method and int numberOfEatenFood in FarmAnimal.
+
+Note: Chicken.java and Pig.java did not extend LivingThing in the previous step due to a mistake. Now it is correctly extending the new parent class FarmAnimal. Steps 6 and 7 notes were edited slightly.
+
+
+#########
+# Step 9
+
+Code affected: FarmAnimal.java, AnimalFood.java, AnimalManure.java, Egg.java, Human.java
+
+Flaw: processing over a sparse 2D array, and variable myFarmAnimals includes Objects that are not just farm animals and can be separated further.
+
+Fix: created ArrayList in FarmObject that encompasses all FarmObjects, and other ArrayLists in AnimalFood, AnimalManure, Egg, Human. In Human.java, Object[][] was replaced with ArrayList, myBasket was changed to static, and a new ArrayList collectedManure was created. All applicable ArrayLists have Javadoc and adds itself into their ArrayList, except for those in Human.java.
+
+Note: completed the Javadoc for FarmObject.
+
+##########
+# Step 10
+
+Code affected: AnimalFood.java, Wind.java
+
+Flaw: duplicate and unnecessary code which can become one method. blow methods in AnimalFood should correspond to Wind.java.
+
+Fix: deleted blown methods in AnimalFood and made significant changes to Wind.java, including variable names and methods. All applicable methods and variables have Javadoc and comments when necessary.
+
+##########
+# Step 11
+
+Code affected: Human.dropFood
+
+Flaw: dropFood has fairly duplicate code (with inconsistent coordinate names).
+
+Fix: created a for loop inside a for loop to drop the 4 pieces of food for the Human.dropFood, fixed typo in Javadoc, and added a comment.
+
+Note: previous step number did not change; fixed in this commit.
+
+##########
+# Step 12
+
+Code affected: Chicken.aneggishere, Chicken.layEgg
+
+Flaw: Chicken.aneggishere is unnecessary (and has inconsistent coordinate names) and Chicken.layEgg has duplicate code as well as a print statement.
+
+Fix: Deleted Chicken.aneggishere because the ArrayList uncollectedEggs in Eggs already has access to the Egg's coordinates after initialization. Chicken.layEgg only needs to construct an Egg.
+
+##########
+# Step 13
+
+Code affected: LivingThings.java and FarmObject.java
+
+Flaw: N/A. However, new methods in LivingThings will be used for move() methods in child classes.
+
+Fix: created new methods moveCloserToFarmObject and randomMovement in LivingThing in preparation for the subsequent steps to change move() methods in child classes. Variables xBound and yBound created in FarmObject as LivingThing objects should not move out of the window (and this also indirectly influences the placement of AnimalFood, AnimalManure, Egg).
+
+##########
+# Step 14
+
+Code affected: Human.java, LivingThings.java, FarmObject.java
+
+Flaw: Human.move has very ugly code (and now incompatible code). The Egg target variable can be set as FarmObject for more general use and can be inherited by all LivingThings.
+
+Fix: made significant changes to Human.move so that it actually does what it should (pick up the Eggs and AnimalManure). Added Human.reportStock to show the number of Eggs and AnimalManure collected in the window. Extra necessary code includes setting the Egg target variable as FarmObject target in LivingThings.java and added removeThisFarmObject method in FarmObject.java so it can be inherited later.
+
+##########
+# Step 15
+
+Code affected: FarmAnimal.move, Chicken.move, Pig.move
+
+Flaw: Chicken.move and Pig.move has very ugly code (and now incompatible code). Common method should be inherited from parent class FarmAnimal.
+
+Fix: created FarmAnimal.move to be inherited by Chicken and Pig. Chicken.move overrides to add condition of randomly laying eggs. Deleted in Pig. Have the necessary Javadoc and comments in applicable code.
+
+Note: edited Javadoc in FarmAnimal.java.
+
+##########
+# Step 16
+
+Code affected: AnimalManure.java, Pig.digest
+
+Flaw: N/A. Extra constructor and override method for variation and aesthetics.
+
+Fix: created a new constructor for AnimalManure with an extra parameter for appearance to change the Pig's AnimalManure produced in the Pig.digest method (overrides FarmAnimal.move).
+
+##########
+# Step 17
+
+Code affected: Main.java
+
+Flaw: very ugly code that is incompatible to changes made with lots of useless casting, if statements, and for loops due to no inheritance.
+
+Fix: almost completely changed the code in Main.java (except for important JavaFX code) to conform to the new changes made. Change start and drawShapes method, and the added private methods constructLivingThings and moveLivingThingsAndFood so the start method is not handling everything. Also added variables for the columns and rows of the window.
+
+##########
+# Step 18
+
+Code affected: all .java files
+
+Flaw: some yellow markers, unused import statements, some minor comments and Javadoc.
+
+Fix: Finalized code: changed some yellow markers, remove unused import statements and minor comment and Javadoc editing.
+
+Note: the exception was fixed early on in Step 9 when arrays were changed to ArrayLists. Therefore there would not be any out of bounds or attempted creation of an item with a negative index from then on, since the coordinates of each Object is handled by the FarmObject.setLocation method and every FarmObject's own x and y coordinates.
+Note: all Javadoc and comments were written as the code was fixed and changed, so only minor edits were needed at this final step (before the addition of a new farm item).
+
+##########
+# Step 19 (New FarmObjects!)
+
+Code affected: NEW: Fox.java, FoxDen.java, EggTrap.java; ORIGINAL: Main.java (Main.constructLivingThings, Main.drawShapes, some misc parameters), Egg.java (new Egg constructor - extra parameter of Color colour), LivingThing.java (new moveCloserToFarmObject - extra parameter int speed), Human.java (Human.move, private myBasket -> package-private), Chicken.java (Chicken.move - chance it will lay eggs), FarmAnimal.java and Pig.java (both yellow markers)
+
+Flaw: N/A. However, there were some very minor comment or Javadoc edits that were missed in the previous commit as well as misc yellow markers (unnecessary variable assignments, i.e. only needed "new TheObject()" to initialize).
+
+Fix: N/A. However, the minor comment or Javadoc edits were made and fixed the misc yellow markers. Also changed some of the probabilities in move methods of LivingThings and values of some parameters.
+
+Note: The new farm item created was the Fox, which steals the eggs from Humans. But the Humans also set up traps where the egg trap (new farm item EggTrap) will trap the Fox and force the Fox to recuperate for a while in its fox den (new farm item FoxDen) only if the human releases it by moving within 1 unit of the trap.
